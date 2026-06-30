@@ -5,36 +5,83 @@ class PurchaseOptions extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
+  get radios() {
+    return this.querySelectorAll(".purchase-option");
+  }
 
-    this.radios = this.querySelectorAll(".purchase-option");
-    this.select = this.querySelector("#selling-plan-select");
-    this.cards = this.querySelectorAll(".purchase-card");
+  get select() {
+    return this.querySelector("#selling-plan-select");
+  }
+
+  get cards() {
+    return this.querySelectorAll(".purchase-card");
+  }
+
+
+  connectedCallback() {
 
     this.planData = JSON.parse(
       document.getElementById("selling-plans-data").textContent
     );
 
-    this.radios.forEach(radio => {
-      radio.addEventListener("change", () => this.updatePurchaseOption());
+
+
+    this.addEventListener("change", (event) => {
+
+      if (event.target.matches(".purchase-option")) {
+        this.updatePurchaseOption();
+      }
+
+      if (event.target.matches("#selling-plan-select")) {
+        this.updateSellingPlan();
+      }
+
     });
 
-    if (this.select) {
-
-      this.select.addEventListener("change", () => {
-        this.updateSellingPlan();
-      });
-
-    }
 
     // Start observer
     this.observeSellingPlanInput();
 
+    this.variantChangeUnsubscriber = subscribe(
+      PUB_SUB_EVENTS.variantChange,
+      this.handleVariantChange.bind(this)
+    );
+
     // Initial UI
-    this.updateSellingPlan();
+    // this.updateSellingPlan();
     this.updatePurchaseOption();
 
   }
+
+
+  handleVariantChange({ data }) {
+
+
+    const productInfo = this.closest("product-info");
+
+    if (!productInfo || productInfo.dataset.section !== data.sectionId) {
+      return;
+    }
+
+    // নতুন plan data
+    const script = this.querySelector("#selling-plans-data");
+
+    if (script) {
+      this.planData = JSON.parse(script.textContent);
+    }
+
+    // UI sync
+    this.updatePurchaseOption();
+
+  }
+
+
+  disconnectedCallback() {
+
+    this.variantChangeUnsubscriber?.();
+
+  }
+
 
   observeSellingPlanInput() {
 
