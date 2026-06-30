@@ -1,4 +1,5 @@
 
+
 class PurchaseOptions extends HTMLElement {
 
   constructor() {
@@ -251,3 +252,22 @@ class PurchaseOptions extends HTMLElement {
 }
 
 customElements.define("purchase-options", PurchaseOptions);
+
+
+const customSelects = document.querySelectorAll('.custom-select');
+
+customSelects.forEach((wrapper) => {
+  const select = wrapper.querySelector('select');
+
+  select.addEventListener('mousedown', () => {
+    wrapper.classList.toggle('open');
+  });
+
+  select.addEventListener('blur', () => {
+    wrapper.classList.remove('open');
+  });
+
+  select.addEventListener('change', () => {
+    wrapper.classList.remove('open');
+  });
+});
