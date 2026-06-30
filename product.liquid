@@ -1,16 +1,21 @@
- {%- when 'subscription' -%}
+                {%- when 'subscription' -%}
 
-    <purchase-options  id="purchase-options-{{ section.id }}" >
+           
+   
+                  <purchase-options  id="purchase-options-{{ section.id }}" >
 
                      {% assign current_variant = product.selected_or_first_available_variant %}
 
+                      <!-- Subscription -->
+                    {% if current_variant.selling_plan_allocations.size > 0 %}
+ 
                   <div class="purchase-wrapper">
 
                     <!-- One Time Purchase -->
                     {% unless product.requires_selling_plan %}
                     <label class="purchase-card one-time active">
                       <div class="purchase-header">
-                        <div class="left">
+                        <div class="left radio-label">
                           <input
                             type="radio"
                             name="purchase_option"
@@ -28,9 +33,7 @@
                     </label>
                     {% endunless %}
 
-                    <!-- Subscription -->
-                    {% if current_variant.selling_plan_allocations.size > 0 %}
-
+                   
                       {% assign allocation = current_variant.selling_plan_allocations.first %}
                       {% assign plan_group = product.selling_plan_groups.first %}
 
@@ -39,15 +42,17 @@
 
                       <div class="subscription-box">
 
-                        <div class="most-chosen">
-                          MOST CHOSEN
-                        </div>
+                      
 
                         <label class="purchase-card subscribe">
 
+                          <span class="most-chosen">
+                          MOST CHOSEN
+                        </span>
+
                           <div class="purchase-header">
 
-                            <div class="left">
+                            <div class="left radio-label">
 
                               <input
                                 type="radio"
@@ -93,11 +98,15 @@
                           <!-- Delivery -->
 
                           <div class="delivery-row">
+ 
 
-                            <span>Deliver Every</span>
 
+                             <label for="selling-plan-select">Deliver Every</label>
                                         
 
+                             <div class="custom-select">
+
+                            
                             <select id="selling-plan-select">
 
                               {% for allocation in current_variant.selling_plan_allocations %}
@@ -120,6 +129,11 @@
                               {% endfor %}
 
                             </select>
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M13.354 6.35378L8.35403 11.3538C8.30759 11.4003 8.25245 11.4372 8.19175 11.4623C8.13105 11.4875 8.06599 11.5004 8.00028 11.5004C7.93457 11.5004 7.86951 11.4875 7.80881 11.4623C7.74811 11.4372 7.69296 11.4003 7.64653 11.3538L2.64653 6.35378C2.55271 6.25996 2.5 6.13272 2.5 6.00003C2.5 5.86735 2.55271 5.7401 2.64653 5.64628C2.74035 5.55246 2.8676 5.49976 3.00028 5.49976C3.13296 5.49976 3.26021 5.55246 3.35403 5.64628L8.00028 10.2932L12.6465 5.64628C12.693 5.59983 12.7481 5.56298 12.8088 5.53784C12.8695 5.5127 12.9346 5.49976 13.0003 5.49976C13.066 5.49976 13.131 5.5127 13.1917 5.53784C13.2524 5.56298 13.3076 5.59983 13.354 5.64628C13.4005 5.69274 13.4373 5.74789 13.4625 5.80859C13.4876 5.86928 13.5006 5.93434 13.5006 6.00003C13.5006 6.06573 13.4876 6.13079 13.4625 6.19148C13.4373 6.25218 13.4005 6.30733 13.354 6.35378Z" fill="#1C1B18"/>
+                              </svg>
+
+                              </div>
 
                           </div>
 
@@ -127,19 +141,41 @@
 
                           <div class="benefits">
 
-                            <div>✓ Skip or cancel anytime</div>
+                            <ul>
+                              <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="16" height="16" rx="8" fill="#928469"/>
+                            <path d="M11.9713 6.03365L6.97127 11.0336C6.94224 11.0627 6.90778 11.0858 6.86984 11.1015C6.83191 11.1172 6.79124 11.1253 6.75017 11.1253C6.70911 11.1253 6.66844 11.1172 6.6305 11.1015C6.59257 11.0858 6.5581 11.0627 6.52908 11.0336L4.34158 8.84615C4.28294 8.78751 4.25 8.70798 4.25 8.62505C4.25 8.54213 4.28294 8.4626 4.34158 8.40396C4.40022 8.34532 4.47975 8.31238 4.56267 8.31238C4.6456 8.31238 4.72513 8.34532 4.78377 8.40396L6.75017 10.3708L11.5291 5.59146C11.5877 5.53282 11.6672 5.49988 11.7502 5.49988C11.8331 5.49988 11.9126 5.53282 11.9713 5.59146C12.0299 5.6501 12.0628 5.72963 12.0628 5.81255C12.0628 5.89548 12.0299 5.97501 11.9713 6.03365Z" fill="white"/>
+                            </svg>
+                            Skip or cancel anytime
+                            </li>
 
-                            <div>✓ Access to VIP support</div>
+                            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect width="16" height="16" rx="8" fill="#928469"/>
+                              <path d="M11.9713 6.03365L6.97127 11.0336C6.94224 11.0627 6.90778 11.0858 6.86984 11.1015C6.83191 11.1172 6.79124 11.1253 6.75017 11.1253C6.70911 11.1253 6.66844 11.1172 6.6305 11.1015C6.59257 11.0858 6.5581 11.0627 6.52908 11.0336L4.34158 8.84615C4.28294 8.78751 4.25 8.70798 4.25 8.62505C4.25 8.54213 4.28294 8.4626 4.34158 8.40396C4.40022 8.34532 4.47975 8.31238 4.56267 8.31238C4.6456 8.31238 4.72513 8.34532 4.78377 8.40396L6.75017 10.3708L11.5291 5.59146C11.5877 5.53282 11.6672 5.49988 11.7502 5.49988C11.8331 5.49988 11.9126 5.53282 11.9713 5.59146C12.0299 5.6501 12.0628 5.72963 12.0628 5.81255C12.0628 5.89548 12.0299 5.97501 11.9713 6.03365Z" fill="white"/>
+                              </svg>
+                              Access to VIP support
+                              </li>
 
-                            <div>✓ 15% off every order</div>
+                            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <rect width="16" height="16" rx="8" fill="#928469"/>
+                              <path d="M11.9713 6.03365L6.97127 11.0336C6.94224 11.0627 6.90778 11.0858 6.86984 11.1015C6.83191 11.1172 6.79124 11.1253 6.75017 11.1253C6.70911 11.1253 6.66844 11.1172 6.6305 11.1015C6.59257 11.0858 6.5581 11.0627 6.52908 11.0336L4.34158 8.84615C4.28294 8.78751 4.25 8.70798 4.25 8.62505C4.25 8.54213 4.28294 8.4626 4.34158 8.40396C4.40022 8.34532 4.47975 8.31238 4.56267 8.31238C4.6456 8.31238 4.72513 8.34532 4.78377 8.40396L6.75017 10.3708L11.5291 5.59146C11.5877 5.53282 11.6672 5.49988 11.7502 5.49988C11.8331 5.49988 11.9126 5.53282 11.9713 5.59146C12.0299 5.6501 12.0628 5.72963 12.0628 5.81255C12.0628 5.89548 12.0299 5.97501 11.9713 6.03365Z" fill="white"/>
+                              </svg>
+                              15% off every order
+                              </li>
 
-                            <div>✓ Free U.S. shipping</div>
+                            <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <rect width="16" height="16" rx="8" fill="#928469"/>
+                          <path d="M11.9713 6.03365L6.97127 11.0336C6.94224 11.0627 6.90778 11.0858 6.86984 11.1015C6.83191 11.1172 6.79124 11.1253 6.75017 11.1253C6.70911 11.1253 6.66844 11.1172 6.6305 11.1015C6.59257 11.0858 6.5581 11.0627 6.52908 11.0336L4.34158 8.84615C4.28294 8.78751 4.25 8.70798 4.25 8.62505C4.25 8.54213 4.28294 8.4626 4.34158 8.40396C4.40022 8.34532 4.47975 8.31238 4.56267 8.31238C4.6456 8.31238 4.72513 8.34532 4.78377 8.40396L6.75017 10.3708L11.5291 5.59146C11.5877 5.53282 11.6672 5.49988 11.7502 5.49988C11.8331 5.49988 11.9126 5.53282 11.9713 5.59146C12.0299 5.6501 12.0628 5.72963 12.0628 5.81255C12.0628 5.89548 12.0299 5.97501 11.9713 6.03365Z" fill="white"/>
+                          </svg>
+                          Free U.S. shipping
+                          </li>
 
+                            </ul>
                           </div>
 
                           <!-- Description -->
 
-                          <p class="description">
+                          <p class="seling-plan-description">
                             Easily cancel or skip your future subscription orders through your account four days prior to shipment.
                             <a href="#">View Details</a>
                           </p>
@@ -148,7 +184,7 @@
 
                       </div>
 
-                    {% endif %}
+                 
 
                   </div>
 
@@ -165,6 +201,8 @@
           }
           </script>
 
+             {% endif %}
+
           </purchase-options>
 
 
@@ -174,4 +212,4 @@
           display: none !important;
       }
       {%- endstyle -%}
-           
+      
