@@ -1,0 +1,177 @@
+ {%- when 'subscription' -%}
+
+           
+                  {% assign current_variant = product.selected_or_first_available_variant %}
+                  <purchase-options>
+
+                  <div class="purchase-wrapper">
+
+                    <!-- One Time Purchase -->
+                    {% unless product.requires_selling_plan %}
+                    <label class="purchase-card one-time active">
+                      <div class="purchase-header">
+                        <div class="left">
+                          <input
+                            type="radio"
+                            name="purchase_option"
+                            value=""
+                            checked
+                            class="purchase-option"
+                          >
+                          <span>One Time Purchase</span>
+                        </div>
+
+                        <div class="right">
+                          <strong>{{ current_variant.price | money }}</strong>
+                        </div>
+                      </div>
+                    </label>
+                    {% endunless %}
+
+                    <!-- Subscription -->
+                    {% if current_variant.selling_plan_allocations.size > 0 %}
+
+                      {% assign allocation = current_variant.selling_plan_allocations.first %}
+                      {% assign plan_group = product.selling_plan_groups.first %}
+
+                      {% assign save = current_variant.price | minus: allocation.price %}
+                      {% assign save_percent = save | times: 100 | divided_by: current_variant.price %}
+
+                      <div class="subscription-box">
+
+                        <div class="most-chosen">
+                          MOST CHOSEN
+                        </div>
+
+                        <label class="purchase-card subscribe">
+
+                          <div class="purchase-header">
+
+                            <div class="left">
+
+                              <input
+                                type="radio"
+                                name="purchase_option"
+                                value="{{ allocation.selling_plan.id }}"
+                                class="purchase-option"
+                              >
+
+                              <div>
+
+                                <div class="title-row">
+
+                                  <h4>{{ plan_group.name }}</h4>
+
+                                  <span class="save-badge">
+                                    SAVE {{ save_percent }}%
+                                  </span>
+
+                                </div>
+
+                                <p class="subscription-save-text">
+                                  Save {{ save | money }} today and on every shipment
+                                </p>
+
+                              </div>
+
+                            </div>
+
+                            <div class="price">
+
+                              <div class="sale-price">
+                                {{ allocation.price | money }}
+                              </div>
+
+                              <div class="compare-price">
+                                {{ current_variant.price | money }}
+                              </div>
+
+                            </div>
+
+                          </div>
+
+                          <!-- Delivery -->
+
+                          <div class="delivery-row">
+
+                            <span>Deliver Every</span>
+
+                                        
+
+                            <select id="selling-plan-select">
+
+                              {% for allocation in current_variant.selling_plan_allocations %}
+
+                                {% assign save = current_variant.price | minus: allocation.price %}
+                                {% assign save_percent = save | times: 100 | divided_by: current_variant.price %}
+
+                                <option
+                                  value="{{ allocation.selling_plan.id }}"
+                                  data-price="{{ allocation.price | money }}"
+                                  data-price-raw="{{ allocation.price }}"
+                                  data-compare="{{ current_variant.price | money }}"
+                                  data-compare-raw="{{ current_variant.price }}"
+                                  data-save="{{ save | money }}"
+                                  data-save-percent="{{ save_percent }}"
+                                >
+                                  {{ allocation.selling_plan.name }}
+                                </option>
+
+                              {% endfor %}
+
+                            </select>
+
+                          </div>
+
+                          <!-- Benefits -->
+
+                          <div class="benefits">
+
+                            <div>✓ Skip or cancel anytime</div>
+
+                            <div>✓ Access to VIP support</div>
+
+                            <div>✓ 15% off every order</div>
+
+                            <div>✓ Free U.S. shipping</div>
+
+                          </div>
+
+                          <!-- Description -->
+
+                          <p class="description">
+                            Easily cancel or skip your future subscription orders through your account four days prior to shipment.
+                            <a href="#">View Details</a>
+                          </p>
+
+                        </label>
+
+                      </div>
+
+                    {% endif %}
+
+                  </div>
+
+          <script type="application/json" id="selling-plans-data">
+          {
+          {% assign current_variant = product.selected_or_first_available_variant %}
+
+          {% for allocation in current_variant.selling_plan_allocations %}
+            "{{ allocation.selling_plan.id }}": {
+              "price": {{ allocation.price }},
+              "compare_price": {{ current_variant.price }}
+            }{% unless forloop.last %},{% endunless %}
+          {% endfor %}
+          }
+          </script>
+
+          </purchase-options>
+
+
+
+      {%- style -%}
+        .sealsubs-target-element.sealsubs-full[data-seal-ac], .sealsubs-target-element.sealsubs-full[data-seal-in] {
+          display: none !important;
+      }
+      {%- endstyle -%}
+      
