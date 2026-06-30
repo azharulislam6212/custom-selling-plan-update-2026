@@ -1,8 +1,8 @@
  {%- when 'subscription' -%}
 
-           
-                  {% assign current_variant = product.selected_or_first_available_variant %}
-                  <purchase-options>
+    <purchase-options  id="purchase-options-{{ section.id }}" >
+
+                     {% assign current_variant = product.selected_or_first_available_variant %}
 
                   <div class="purchase-wrapper">
 
@@ -174,4 +174,4 @@
           display: none !important;
       }
       {%- endstyle -%}
-      
+           
